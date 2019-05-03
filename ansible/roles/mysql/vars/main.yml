@@ -1,0 +1,7 @@
+---
+# vars file for mysql
+
+# list of software to install
+software:
+  - mysql-server
+  - python-mysqldb

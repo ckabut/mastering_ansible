@@ -1,0 +1,69 @@
+---
+
+- hosts: loadbalancer
+  become: true
+  gather_facts: false
+  tasks:
+    - name: check the status of nginx
+      command: service nginx status
+      changed_when: false
+
+    - name: check if nginx is listening on port 80
+      wait_for: port=80 timeout=1
+
+- hosts: webserver
+  become: true
+  gather_facts: false
+  tasks:
+    - name: check the status of webservers
+      command: service apache2 status
+      changed_when: false
+
+    - name: check if apache2 is listening on port 80
+      wait_for: port=80 timeout=1
+
+- hosts: database
+  become: true
+  tasks:
+    - name: check the status of databases
+      command: service mysql status
+      changed_when: false
+
+    - name: check if mysql is listening on port 3306
+      wait_for: host={{ansible_eth0.ipv4.address}} port=3306 timeout=1 
+
+- hosts: control
+  gather_facts: false
+  tasks:
+    - name: verify end2end response
+      uri: url=http://{{item}} return_content=yes
+      loop: "{{groups['loadbalancer']}}"
+      register: lb_index
+      failed_when: "'Hello, from sunny' not in lb_index.content"
+
+- hosts: control
+  gather_facts: false
+  tasks:
+    - name: verify end2end connexion to database
+      uri: url=http://{{item}}/db return_content=yes
+      loop: "{{groups['loadbalancer']}}"
+      register: lb_db_index
+      failed_when: "'Database Connected' not in lb_db_index.content"
+
+- hosts: loadbalancer
+  gather_facts: false
+  tasks:
+    - name: verify backend response
+      uri: url=http://{{item}} return_content=yes
+      loop: "{{groups['webserver']}}"
+      register: app_index
+      failed_when: "'Hello, from sunny {{item}}' not in app_index.content"
+
+- hosts: loadbalancer
+  gather_facts: false
+  tasks:
+    - name: verify backend connexion to database response
+      uri: url=http://{{item}}/db return_content=yes
+      loop: "{{groups['webserver']}}"
+      register: app_db_index
+      failed_when: "'Database Connected from {{item}}' not in app_db_index.content"

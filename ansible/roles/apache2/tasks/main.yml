@@ -1,0 +1,30 @@
+---
+# tasks file for apache2
+
+- name: install tool 
+  apt:
+   name: "{{ item }}"
+   state: latest
+  loop: "{{software}}"
+  tags: ["install"]
+       
+- name: start wsgi module
+  apache2_module:
+   state: present
+   name: wsgi
+  notify: restart apache2
+  tags: ["configure"]
+
+- name : deacivate the default site
+  file : 
+   path: /etc/apache2/sites-enabled/000-default.conf
+   state: absent
+  notify: restart apache2
+  tags: ["configure"]
+
+- name: start apache2
+  service:
+   name: apache2
+   state: started
+   enabled: yes
+  tags: ["service"]

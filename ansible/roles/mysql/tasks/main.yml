@@ -1,0 +1,39 @@
+---
+# tasks file for mysql
+
+- name: install tools 
+  apt: 
+    name: "{{item}}"
+    state: latest
+  loop: "{{software}}"
+  tags: ["install"]
+    
+- name: ensure mysql listening on all ports
+  lineinfile: 
+    dest: /etc/mysql/my.cnf
+    regexp: ^bind-address
+    line: "bind-address = {{ansible_eth0.ipv4.address}}"
+  notify: restart mysql
+  tags: ["configure"]
+
+- name : create database
+  mysql_db:
+    name: "{{ db_name }}"
+    state: present
+  tags: ["configure"]
+
+- name : create user
+  mysql_user: 
+    name: "{{ db_user }}"
+    password: "{{db_pwd}}"
+    priv: "{{db_name}}.*:ALL"
+    host: "{{db_host}}"
+    state: present
+  tags: ["configure"]
+
+- name: start mysql service 
+  service: 
+    name: mysql
+    state: started
+    enabled: yes
+  tags: ["service"]

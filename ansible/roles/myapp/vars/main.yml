@@ -1,0 +1,7 @@
+---
+# vars file for myapp
+
+software:
+  -  python-pip
+  - python-virtualenv
+  - python-mysqldb

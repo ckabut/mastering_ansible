@@ -1,0 +1,7 @@
+---
+# vars file for apache2
+
+# list of software to install
+software:
+  - apache2
+  - libapache2-mod-wsgi

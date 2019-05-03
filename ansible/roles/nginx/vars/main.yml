@@ -1,0 +1,13 @@
+---
+# vars file for nginx
+
+# list of software to install
+software:
+  - nginx
+
+# dictionnary used for the definition of my app configuration file and servers port
+
+sites:
+  myapp:
+    frontend: 80
+    backend: 80

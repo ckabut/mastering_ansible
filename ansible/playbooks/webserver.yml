@@ -1,0 +1,8 @@
+---
+
+- hosts: webserver
+  gather_facts: false
+  become: true
+  roles:
+   - apache2
+   - myapp

@@ -1,0 +1,48 @@
+---
+# tasks file for myapp
+
+- name: install tool 
+  apt:
+   name: "{{ item }}"
+   state: latest
+  loop: "{{software}}"
+  tags: ["install"]
+
+- name : copy my app on web server
+  copy : 
+   src: app/
+   dest: /var/www/demo
+   mode: 0755
+  notify: restart apache2
+  tags: ["configure"]
+
+- name : copy template
+  template:
+   src: demo.wsgi.j2
+   dest: /var/www/demo/demo.wsgi.j2 
+   mode: 0755
+  notify: restart apache2
+  tags: ["configure"]
+
+- name : copy virtual host configuration
+  copy : 
+   src: demo.conf
+   dest: /etc/apache2/sites-available
+   mode: 0755
+  notify: restart apache2
+  tags: ["configure"]
+
+- name : setup virtual environement for python
+  pip :
+   requirements: /var/www/demo/requirements.txt
+   virtualenv: /var/www/demo/.venv
+  notify: restart apache2
+  tags: ["configure"]
+
+- name : activate the demo site
+  file : 
+   src: /etc/apache2/sites-available/demo.conf
+   dest: /etc/apache2/sites-enabled/demo.conf
+   state: link
+  notify: restart apache2
+  tags: ["configure"]

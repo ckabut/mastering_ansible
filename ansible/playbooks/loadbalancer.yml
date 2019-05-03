@@ -1,0 +1,7 @@
+---
+- hosts: loadbalancer
+  gather_facts: false
+  become: true
+  roles:
+   - nginx
+

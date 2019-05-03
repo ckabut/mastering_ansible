@@ -1,0 +1,6 @@
+---
+# vars file for control
+
+# list of sotware to be installed
+software:
+  - curl

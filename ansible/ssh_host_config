@@ -1,0 +1,40 @@
+Host control
+  HostName 127.0.0.1
+  Port 2200
+  User ansible
+  IdentityFile ./docker/control/ansible
+  StrictHostKeyChecking no
+  UserKnownHostsFile=/dev/null
+
+Host lb01
+  HostName 127.0.0.1
+  Port 2201
+  User ansible
+  IdentityFile ./docker/env/ansible
+  StrictHostKeyChecking no
+  UserKnownHostsFile=/dev/null
+
+Host app01
+  HostName 127.0.0.1
+  Port 2211
+  User ansible
+  IdentityFile ./docker/env/ansible
+  StrictHostKeyChecking no
+  UserKnownHostsFile=/dev/null
+
+Host app02
+  HostName 127.0.0.1
+  Port 2212
+  User ansible
+  IdentityFile ./docker/env/ansible
+  StrictHostKeyChecking no
+  UserKnownHostsFile=/dev/null
+
+Host db01
+  HostName 127.0.0.1
+  Port 2222
+  User ansible
+  IdentityFile ./docker/env/ansible
+  StrictHostKeyChecking no
+  UserKnownHostsFile=/dev/null
+

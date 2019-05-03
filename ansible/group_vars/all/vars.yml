@@ -1,0 +1,6 @@
+---
+
+db_name: demo
+db_user: demo
+db_pwd: "{{vault_demo_pwd}}"
+db_host: '%'

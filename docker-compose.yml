@@ -1,0 +1,55 @@
+version: '3'
+services:
+
+  control:
+    build: ./docker/control
+    hostname: control
+    container_name: control
+    volumes:
+        - "./ansible/hosts:/etc/ansible/hosts"
+        - "./ansible/playbooks:/etc/ansible/playbooks/"
+        - "./ansible/roles:/etc/ansible/roles"
+        - "./ansible/group_vars:/etc/ansible/group_vars"
+    links:
+      - lb01
+      - app01
+      - app02
+      - db01
+    ports:
+      - "2200:22"
+
+  lb01:
+    build: ./docker/env
+    hostname: lb01
+    container_name: lb01
+    links:
+      - app01
+      - app02
+    ports:
+      - "2201:22"
+      - "8001:80"
+  app01:
+    build: ./docker/env
+    hostname: app01
+    container_name: app01
+    links:
+      - db01
+    ports:
+      - "2211:22"
+      - "8081:80"
+  app02:
+    build: ./docker/env
+    hostname: app02
+    container_name: app02
+    links:
+      - db01
+    ports:
+      - "2212:22"
+      - "8082:80"
+  db01:
+    build: ./docker/env
+    hostname: db01
+    container_name: db01
+    ports:
+      - "2222:22"
+      - "3306:3306"
