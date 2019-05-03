@@ -1,4 +1,3 @@
 # mastering_ansible
-Configuration of control, loadbalancer, web app and database servers with ansible using docker environnement.
-
-Very usefull repository in order to create you own ansible test environement in your local machine
+This repository is used to create a full ansible environement (control, loadbalancer, web app, database) using docker.
+Very usefull if you want to train yourself with ansible on your local machine in your local machine
