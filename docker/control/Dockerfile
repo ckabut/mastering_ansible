@@ -20,6 +20,10 @@ COPY ansible.pub /home/ansible/.ssh/id_rsa.pub
 COPY ansible.pub /home/ansible/.ssh/authorized_keys
 RUN chown -R ansible:ansible /home/ansible/
 RUN echo "ansible ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+RUN echo "demo" > /home/ansible/.vault_password.txt
+RUN chmod 0600 /home/ansible/.vault_password.txt
+RUN chown -R ansible:ansible /home/ansible/.vault_password.txt
+RUN sudo sed -i 's:#vault_password_file = /path/to/vault_password_file:vault_password_file = ~/.vault_password.txt:g' /etc/ansible/ansible.cfg
 
 # Following lines taken from: https://github.com/tianon/dockerfiles
 #
